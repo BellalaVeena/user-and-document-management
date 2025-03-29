@@ -1,0 +1,2 @@
+export const PAGINATION_DEFAULT_OFFSET = 0;
+export const PAGINATION_DEFAULT_LIMIT = 10;
