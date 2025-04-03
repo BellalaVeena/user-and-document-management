@@ -1,99 +1,199 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# User and Document Management System
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A comprehensive NestJS-based API for managing users and documents with advanced features including role-based access control, document processing, and ingestion tracking.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Features
 
-## Description
+- **User Management**
+  - User registration and authentication
+  - Role-based access control (Admin, Editor, Viewer)
+  - JWT-based authentication with token blacklisting
+  - Secure password handling and validation
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **Document Management**
+  - Document upload and storage
+  - Document metadata tracking
+  - Status tracking (Pending, Processing, Completed, Failed)
+  - Role-based document access
 
-## Project setup
+- **Ingestion System**
+  - Document processing via Python backend integration
+  - Ingestion status tracking
+  - Result storage and error handling
+  - Processing parameters customization
 
-```bash
-$ npm install
+- **API Documentation**
+  - Comprehensive Swagger documentation
+  - API versioning and bearer authentication
+
+## Tech Stack
+
+- **Backend**: NestJS, TypeScript
+- **Database**: PostgreSQL with TypeORM
+- **Authentication**: JWT, Passport.js
+- **Documentation**: Swagger/OpenAPI
+- **Integration**: Python backend for document processing
+- **Testing**: Jest, supertest
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v14 or higher)
+- PostgreSQL (v12 or higher)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository
+   ```
+   git clone <repository-url>
+   ```
+
+2. Install dependencies
+   ```
+   npm install
+   ```
+
+3. Create a `.env` file in the root directory with the following content:
+   ```
+   # Database
+   DB_HOST=localhost
+   DB_PORT=5432
+   DB_USERNAME=your_username
+   DB_PASSWORD=your_password
+   DB_NAME=user_document_db
+
+   # JWT
+   JWT_SECRET=your_jwt_secret
+   JWT_EXPIRATION=15m
+   JWT_REFRESH_EXPIRATION=7d
+
+   # Python Backend
+   PYTHON_BACKEND_URL=http://localhost:5000
+   
+   # Application
+   PORT=3012
+   NODE_ENV=development
+   ```
+
+4. Create the database
+   ```
+   createdb user_document_db
+   ```
+
+5. Start the application
+   ```
+   npm run start:dev
+   ```
+
+### API Documentation
+
+Once the application is running, you can access the Swagger documentation at:
+```
+http://localhost:3012/api-docs
 ```
 
-## Compile and run the project
+## Project Structure
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+```
+src/
+├── auth/                 # Authentication module
+│   ├── controllers/      # Auth controllers
+│   ├── dto/              # Data transfer objects
+│   ├── entities/         # Token blacklist entity
+│   ├── guards/           # JWT and role guards
+│   ├── services/         # Auth service and token blacklist service
+│   ├── strategies/       # JWT strategy
+│   └── types/            # Auth types
+│
+├── user/                 # User module
+│   ├── controllers/      # User controllers
+│   ├── dto/              # User DTOs
+│   ├── entities/         # User entity
+│   └── services/         # User service
+│
+├── document/             # Document module
+│   ├── controllers/      # Document controllers
+│   ├── dto/              # Document DTOs
+│   ├── entities/         # Document entity
+│   └── services/         # Document service
+│
+├── ingestion/            # Ingestion module
+│   ├── controllers/      # Ingestion controllers
+│   ├── dto/              # Ingestion DTOs
+│   ├── entities/         # Ingestion entity
+│   └── services/         # Ingestion service
+│
+├── bootstrap/            # Application bootstrap code
+│   └── database.module.ts # Database configuration
+│
+├── app.module.ts         # Main application module
+└── main.ts               # Application entry point
 ```
 
-## Run tests
+## API Endpoints
+
+### Authentication
+- `POST /auth/register` - Register a new user
+- `POST /auth/login` - Authenticate and receive JWT tokens
+- `POST /auth/logout` - Invalidate the current JWT token
+- `POST /auth/refresh` - Get a new access token using refresh token
+
+### Users
+- `GET /users` - Get all users (Admin only)
+- `GET /users/:id` - Get user by ID
+- `PATCH /users/:id` - Update user
+- `DELETE /users/:id` - Delete user (Admin only)
+
+### Documents
+- `POST /documents` - Upload a new document (Admin, Editor)
+- `GET /documents` - Get all documents
+- `GET /documents/:id` - Get document by ID
+- `PATCH /documents/:id` - Update document metadata (Admin, Editor)
+- `DELETE /documents/:id` - Delete document (Admin only)
+
+### Ingestions
+- `POST /ingestions` - Trigger document processing (Admin, Editor)
+- `GET /ingestions` - Get all ingestion processes
+- `GET /ingestions/:id` - Get ingestion process by ID
+- `PATCH /ingestions/:id` - Update ingestion status/results (Admin)
+
+## Testing
+
+The application includes a comprehensive suite of unit tests for all services:
+
+### Running Tests
 
 ```bash
-# unit tests
-$ npm run test
+# Run all tests
+npm run test
 
-# e2e tests
-$ npm run test:e2e
+# Run tests with coverage reporting
+npm run test:cov
 
-# test coverage
-$ npm run test:cov
+# Run specific test file
+npm run test -- user.service
+
+# Run tests in watch mode
+npm run test:watch
 ```
 
-## Deployment
+### Test Coverage
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+The test suite covers:
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+- **UserService**: Tests for CRUD operations, user authentication, and role management
+- **AuthService**: Tests for user validation, login, registration, token refresh, and logout
+- **DocumentService**: Tests for document upload, retrieval, and status management
+- **IngestionService**: Tests for document processing, ingestion tracking, and error handling
 
-```bash
-$ npm install -g mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+All tests use Jest's mocking capabilities to isolate services and their dependencies, ensuring thorough unit testing without external dependencies.
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+[MIT License](LICENSE)
+
+## Contact
+
+For any inquiries, please contact [Your Name](mailto:your.email@example.com)
